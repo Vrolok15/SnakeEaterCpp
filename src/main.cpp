@@ -128,6 +128,7 @@ class Game{
     public:
         Snake snake = Snake();
         Food food = Food(snake.body);
+        bool running = true;
 
         void Draw(){
             food.Draw();
@@ -135,9 +136,12 @@ class Game{
         }
 
         void Update(){
-            snake.Update();
-            CheckCollisionWithFood();
-            CheckCollisionWithEdges();
+            if(running){
+                snake.Update();
+                CheckCollisionWithFood();
+                CheckCollisionWithEdges();
+                CheckCollisionWithTail();
+            }
         }
 
         void CheckCollisionWithFood(){
@@ -153,8 +157,18 @@ class Game{
             }
         }
 
+        void CheckCollisionWithTail(){
+            std::deque<Vector2> headlessBody = snake.body;
+            headlessBody.pop_front();
+            if(elementInDeque(snake.body[0], headlessBody)){
+                GameOver();
+            }
+        }
+
         void GameOver(){
+            running = false;
             snake.Reset();
+            food.position = food.GenerateRandomPos(snake.body);
         }
 };
 
@@ -175,15 +189,19 @@ int main()
 
         if((IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) && game.snake.direction.y != 1){
             game.snake.direction = {0, -1};
+            game.running = true;
         }
         else if((IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_D)) && game.snake.direction.x != -1){
             game.snake.direction = {1, 0};
+            game.running = true;
         }
         else if((IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_S)) && game.snake.direction.y != -1){
             game.snake.direction = {0, 1};
+            game.running = true;
         }
         else if((IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_A)) && game.snake.direction.x != 1){
             game.snake.direction = {-1, 0};
+            game.running = true;
         }
         
         //Drawing
