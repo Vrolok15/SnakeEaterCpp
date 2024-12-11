@@ -8,6 +8,7 @@ Color darkGreen = {43, 51, 24, 255};
 
 int cellSize = 32;
 int cellCount = 24;
+int offset = 60;
 
 double lastUpdateTime = 0;
 
@@ -58,10 +59,10 @@ class Snake
                 float x = body[i].x;
                 float y = body[i].y;
                 if(i == 0){
-                    DrawTexture(headTexture, x * cellSize, y * cellSize, WHITE);
+                    DrawTexture(headTexture, x * cellSize + offset, y * cellSize + offset, WHITE);
                 }
                 else{
-                    DrawTexture(bodyTexture, x * cellSize, y * cellSize, WHITE);
+                    DrawTexture(bodyTexture, x * cellSize + offset, y * cellSize + offset, WHITE);
                 }
             }
         }
@@ -104,7 +105,7 @@ class Food
 
         void Draw()
         {
-            DrawTexture(texture, position.x * cellSize, position.y * cellSize, WHITE);
+            DrawTexture(texture, position.x * cellSize + offset, position.y * cellSize + offset, WHITE);
         }
 
         Vector2 generateRandomCell(){
@@ -175,7 +176,7 @@ class Game{
 int main() 
 {
     std::cout << "Starting the game..." << std::endl;
-    InitWindow(cellSize * cellCount, cellSize * cellCount, "SNAKE!");
+    InitWindow(cellSize * cellCount + offset * 2, cellSize * cellCount + offset * 2, "SNAKE!");
     SetTargetFPS(60);
 
     Game game = Game();
@@ -206,6 +207,7 @@ int main()
         
         //Drawing
         ClearBackground(green);
+        DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cellSize*cellCount+10, (float)cellSize*cellCount+10}, 5, darkGreen);
         game.Draw();
 
         EndDrawing();
