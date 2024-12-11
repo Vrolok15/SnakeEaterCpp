@@ -130,6 +130,21 @@ class Game{
         Snake snake = Snake();
         Food food = Food(snake.body);
         bool running = true;
+        int score = 0;
+        Sound eatSound;
+        Sound wallSound;
+
+        Game(){
+            InitAudioDevice();
+            eatSound = LoadSound("sfx/food.ogg");
+            wallSound = LoadSound("sfx/over.ogg");
+        }
+
+        ~Game(){
+            UnloadSound(eatSound);
+            UnloadSound(wallSound);
+            CloseAudioDevice();
+        }
 
         void Draw(){
             food.Draw();
@@ -149,6 +164,8 @@ class Game{
             if(Vector2Equals(snake.body[0], food.position)){
                 food.position = food.GenerateRandomPos(snake.body);
                 snake.addSegment = true;
+                score++;
+                PlaySound(eatSound);
             }
         }
 
@@ -170,6 +187,8 @@ class Game{
             running = false;
             snake.Reset();
             food.position = food.GenerateRandomPos(snake.body);
+            score = 0;
+            PlaySound(wallSound);
         }
 };
 
@@ -208,6 +227,8 @@ int main()
         //Drawing
         ClearBackground(green);
         DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cellSize*cellCount+10, (float)cellSize*cellCount+10}, 5, darkGreen);
+        DrawText("SNAKE EATER", offset - 5, 20, 40, darkGreen);
+        DrawText(TextFormat("Score: %i", game.score), offset - 5, offset + cellCount*cellSize + 10, 40, darkGreen);
         game.Draw();
 
         EndDrawing();
