@@ -112,6 +112,19 @@ int main()
         if(eventTriggered(0.2)){
             snake.Update();
         }
+
+        if(IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)){
+            snake.direction = {0, -1};
+        }
+        else if(IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_D)){
+            snake.direction = {1, 0};
+        }
+        else if(IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_S)){
+            snake.direction = {0, 1};
+        }
+        else if(IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_A)){
+            snake.direction = {-1, 0};
+        }
         
         //Drawing
         ClearBackground(green);
