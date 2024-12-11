@@ -96,40 +96,52 @@ class Food
 
 };
 
+class Game{
+    public:
+        Snake snake = Snake();
+        Food food = Food();
+
+        void Draw(){
+            food.Draw();
+            snake.Draw();
+        }
+
+        void Update(){
+            snake.Update();
+        }
+};
+
 int main() 
 {
     std::cout << "Starting the game..." << std::endl;
     InitWindow(cellSize * cellCount, cellSize * cellCount, "SNAKE!");
     SetTargetFPS(60);
 
-    Food food = Food();
-
-    Snake snake = Snake();
+    Game game = Game();
 
     while(WindowShouldClose() == false){
         BeginDrawing();
 
         if(eventTriggered(0.2)){
-            snake.Update();
+            game.Update();
         }
 
-        if((IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) && snake.direction.y != 1){
-            snake.direction = {0, -1};
+        if((IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) && game.snake.direction.y != 1){
+            game.snake.direction = {0, -1};
         }
-        else if((IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_D)) && snake.direction.x != -1){
-            snake.direction = {1, 0};
+        else if((IsKeyPressed(KEY_RIGHT)|| IsKeyPressed(KEY_D)) && game.snake.direction.x != -1){
+            game.snake.direction = {1, 0};
         }
-        else if((IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_S)) && snake.direction.y != -1){
-            snake.direction = {0, 1};
+        else if((IsKeyPressed(KEY_DOWN)|| IsKeyPressed(KEY_S)) && game.snake.direction.y != -1){
+            game.snake.direction = {0, 1};
         }
-        else if((IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_A)) && snake.direction.x != 1){
-            snake.direction = {-1, 0};
+        else if((IsKeyPressed(KEY_LEFT)|| IsKeyPressed(KEY_A)) && game.snake.direction.x != 1){
+            game.snake.direction = {-1, 0};
         }
         
         //Drawing
         ClearBackground(green);
-        food.Draw();
-        snake.Draw();
+        game.Draw();
 
         EndDrawing();
     }
