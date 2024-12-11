@@ -75,6 +75,11 @@ class Snake
                 body.pop_back();
             }
         }
+
+        void Reset(){
+            body = {Vector2{6,9}, Vector2{5,9}, Vector2{4,9}};
+            direction = Vector2{1,0};
+        }
 };
 
 class Food
@@ -132,6 +137,7 @@ class Game{
         void Update(){
             snake.Update();
             CheckCollisionWithFood();
+            CheckCollisionWithEdges();
         }
 
         void CheckCollisionWithFood(){
@@ -139,6 +145,16 @@ class Game{
                 food.position = food.GenerateRandomPos(snake.body);
                 snake.addSegment = true;
             }
+        }
+
+        void CheckCollisionWithEdges(){
+            if(snake.body[0].x == cellCount || snake.body[0].x == -1 || snake.body[0].y == cellCount || snake.body[0].y == -1){
+                GameOver();
+            }
+        }
+
+        void GameOver(){
+            snake.Reset();
         }
 };
 
