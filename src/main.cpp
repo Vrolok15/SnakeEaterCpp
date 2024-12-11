@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <iostream>
 #include <deque>
+#include <raymath.h>
 
 Color green = {173, 204, 96, 255};
 Color darkGreen = {43, 51, 24, 255};
@@ -8,11 +9,23 @@ Color darkGreen = {43, 51, 24, 255};
 int cellSize = 32;
 int cellCount = 24;
 
+double lastUpdateTime = 0;
+
+bool eventTriggered(double interval){
+    double currentTime = GetTime();
+    if (currentTime - lastUpdateTime >= interval){
+        lastUpdateTime = currentTime;
+        return true;
+    }
+    return false;
+}
+
 class Snake
 {
     public:
         Texture2D headTexture, bodyTexture;
         std::deque<Vector2> body = {Vector2{6,9}, Vector2{5,9}, Vector2{4,9}};
+        Vector2 direction = Vector2{1,0};
 
         Snake()
         {
@@ -41,6 +54,11 @@ class Snake
                     DrawTexture(bodyTexture, x * cellSize, y * cellSize, WHITE);
                 }
             }
+        }
+
+        void Update(){
+            body.pop_back();
+            body.push_front(body[0] + direction);
         }
 };
 
@@ -90,6 +108,10 @@ int main()
 
     while(WindowShouldClose() == false){
         BeginDrawing();
+
+        if(eventTriggered(0.2)){
+            snake.Update();
+        }
         
         //Drawing
         ClearBackground(green);
