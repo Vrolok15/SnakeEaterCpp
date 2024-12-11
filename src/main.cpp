@@ -10,7 +10,7 @@ int cellCount = 24;
 class Food{
 
     public:
-        Vector2 position = {5, 6};
+        Vector2 position;
         Texture2D texture;
 
         Food()
@@ -18,6 +18,7 @@ class Food{
             Image image = LoadImage("graphics/food.png");
             texture = LoadTextureFromImage(image);
             UnloadImage(image);
+            position = GenerateRandomPos();
         }
 
         ~Food()
@@ -30,6 +31,13 @@ class Food{
             DrawTexture(texture, position.x * cellSize, position.y * cellSize, WHITE);
         }
 
+        Vector2 GenerateRandomPos()
+        {
+            float x = GetRandomValue(0, cellCount - 1);
+            float y = GetRandomValue(0, cellCount - 1);
+            return Vector2{x, y};
+        }
+
 };
 
 int main() 
@@ -39,6 +47,8 @@ int main()
     SetTargetFPS(60);
 
     Food food = Food();
+    Food food2 = Food();
+    Food food3 = Food();
 
     while(WindowShouldClose() == false){
         BeginDrawing();
@@ -46,6 +56,8 @@ int main()
         //Drawing
         ClearBackground(green);
         food.Draw();
+        food2.Draw();
+        food3.Draw();
 
         EndDrawing();
     }
